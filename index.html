@@ -20,6 +20,9 @@
                 <button type="button" id="facebook-login" name="facebook-login"
                     class="btn btn-primary btn-lg btn-block"><i class="fa fa-facebook "></i>
                     Facebook</button>
+                    <button type="button" id="twitter-login" name="twitter-login"
+                    class="btn btn-secondary btn-lg btn-block"><i class="fa fa-twitter "></i>
+                   Twitter</button>
             </div><!-- end col -->
         </div><!--  end row -->
         </form>
@@ -30,7 +33,7 @@
     // Import the functions you need from the SDKs you need
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-app.js";
     import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-analytics.js";
-    import { getAuth, FacebookAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
+    import { getAuth, FacebookAuthProvider, signInWithPopup, TwitterAuthProvider } from "https://www.gstatic.com/firebasejs/10.4.0/firebase-auth.js";
     // TODO: Add SDKs for Firebase products that you want to use
     // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -53,6 +56,8 @@
 
     const provider = new FacebookAuthProvider();
     console.log(provider);
+    const provider1 = new TwitterAuthProvider();
+    console.log(provider1);
 
     //----- facebook login code start	  
     document.getElementById("facebook-login").addEventListener("click", function () {
@@ -83,6 +88,36 @@
             });
     });
     //----- End
+
+
+    document.getElementById("twitter-login").addEventListener("click", function () {
+  // Sign in with Twitter using a pop-up
+  signInWithPopup(auth, provider1)
+    .then((result) => {
+      // The signed-in user info
+      const user = result.user;
+
+      // This gives you a Twitter Access Token and Secret. You can use them to access the Twitter API.
+      const credential = TwitterAuthProvider.credentialFromResult(result);
+      const accessToken = credential.accessToken;
+      const secret = credential.secret;
+
+      alert("Welcome " + user.displayName);
+      console.log(user);
+      // ...
+    })
+    .catch((error) => {
+      // Handle Errors here.
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      console.log(errorMessage);
+      // The email of the user's account used.
+      const email = error.customData.email;
+      // The AuthCredential type that was used.
+      const credential = TwitterAuthProvider.credentialFromError(error);
+      // ...
+    });
+});
 
 </script>
 
